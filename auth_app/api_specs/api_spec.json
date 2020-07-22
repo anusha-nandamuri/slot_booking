@@ -1,0 +1,222 @@
+{
+   "swagger":"2.0",
+   "host": "127.0.0.1:8000",
+   "basePath": "/api/auth_app/",
+   "info":{
+      "version":"1.0.0",
+      "title":"Simple API",
+      "description":"A simple API to learn how to write OpenAPI Specification"
+
+    },
+   "consumes":[
+      "application/json"
+
+    ],
+   "produces":[
+      "application/json"
+
+    ],
+   "securityDefinitions":{
+      "oauth":{
+         "tokenUrl":"http://auth.ibtspl.com/oauth2/",
+         "flow":"password",
+         "scopes":{
+            "read":"read users",
+            "write":"create users",
+            "update":"update users",
+            "delete":"delete users"
+          },
+         "type":"oauth2"
+      }
+   },
+   "definitions":{
+      "UsernamePasswordFields":{
+         "type":"object",
+         "properties":{
+            "username":{
+               "type":"string"
+            },
+            "password":{
+               "type":"string"
+            }
+         },
+         "required":[
+            "username",
+            "password"
+         ]
+      }
+   },
+   "parameters":{
+      "UserParameters":{
+         "name":"username_password",
+         "in":"body",
+         "description":"username and password parameters",
+         "schema":{
+            "$ref":"#/definitions/UsernamePasswordFields"
+         }
+      }
+   },
+   "responses":{
+      "InvalidUsernameResponse":{
+         "description":"Given Username does not exist in the database",
+         "schema":{
+            "type":"object",
+            "properties":{
+               "response":{
+                  "type":"string"
+               },
+               "http_status_code":{
+                  "type":"integer"
+               },
+               "res_status":{
+                  "type":"string",
+                  "enum": [
+                     "INVALID_USERNAME"
+                  ]
+               }
+            }
+         }
+      },
+      "InvalidPasswordResponse":{
+         "description":"Given password doesn't match to given username",
+         "schema":{
+            "type":"object",
+            "properties":{
+               "response":{
+                  "type":"string"
+               },
+               "http_status_code":{
+                  "type":"integer"
+               },
+               "res_status":{
+                  "type":"string",
+                  "enum": [
+                     "INVALID_PASSWORD"
+                  ]
+               }
+            },
+            "required": [
+               "response",
+               "http_status_code",
+               "res_status"
+            ]
+         }
+      },
+      "LoggedInResponse":{
+         "description":"Successfully Logged in",
+         "schema":{
+            "type":"object",
+            "properties":{
+               "access_token":{
+                  "type":"string"
+               },
+               "is_admin":{
+                  "type":"boolean"
+               }
+            },
+            "required": [
+               "access_token",
+               "is_admin"
+            ]
+         }
+      },
+      "LoggedOutResponse":{
+         "description":"Successfully logged out"
+      },
+      "SignUpResponse":{
+         "description":"Account created and signed up"
+      },
+      "UsernameAlreadyExistsResponse": {
+         "description": "Given username already exists in database",
+         "schema":{
+            "type":"object",
+            "properties":{
+               "response":{
+                  "type":"string"
+               },
+               "http_status_code":{
+                  "type":"integer"
+               },
+               "res_status":{
+                  "type":"string",
+                  "enum": [
+                     "USERNAME_ALREADY_EXISTS"
+                  ]
+               }
+            },
+            "required": [
+               "response",
+               "http_status_code",
+               "res_status"
+            ]
+         }
+      }
+   },
+   "paths":{
+      "/login/v1/":{
+         "post":{
+            "operationId":"login",
+            "summary":"login authorized user",
+            "description":"login user",
+            "parameters":[
+               {
+                  "$ref":"#/parameters/UserParameters"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "$ref":"#/responses/LoggedInResponse"
+               },
+               "400":{
+                  "$ref":"#/responses/InvalidPasswordResponse"
+               },
+               "404":{
+                  "$ref":"#/responses/InvalidUsernameResponse"
+               }
+            },
+            "security":[]
+         }
+      },
+      "/logout/v1/":{
+         "delete":{
+            "operationId":"logout",
+            "description":"user log out",
+            "parameters":[
+
+            ],
+            "security":[
+               {
+                  "oauth":[
+                     "read",
+                     "delete"
+                  ]
+               }
+            ],
+            "responses":{
+               "200":{
+                  "$ref":"#/responses/LoggedOutResponse"
+               }
+            }
+         }
+      },
+      "/signup/v1/":{
+         "post":{
+            "operationId":"signup",
+            "description":"user sign up",
+            "parameters":[
+               {
+                  "$ref":"#/parameters/UserParameters"
+               }
+            ],
+            "responses":{
+               "201":{
+                  "$ref":"#/responses/SignUpResponse"
+               },
+               "400": {
+                  "$ref": "#/responses/UsernameAlreadyExistsResponse"
+               }
+            }
+         }
+      }
+   }
+}

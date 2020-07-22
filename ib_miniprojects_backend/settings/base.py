@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -24,7 +25,8 @@ ALLOWED_HOSTS = [
     "ib-miniprojects-backend-beta.apigateway.in",
     "ib-miniprojects-backend-gamma.apigateway.in",
     "127.0.0.1",
-    "localhost"
+    "localhost",
+    "*"
 ]
 
 ROOT_URLCONF = 'ib_miniprojects_backend.urls'
@@ -53,7 +55,7 @@ CORS_ALLOW_HEADERS = (
     'x-api-key',
     'x-source'
 )
-#*************** Internationalization *******************#
+# *************** Internationalization *******************#
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -66,7 +68,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
 
 from ib_common.logger.log_custom_formatter import LogCustomFormatter
 
@@ -142,7 +143,7 @@ LOGGING = {
             '()': LogCustomFormatter,
         },
         'console': {
-            'format': "[%(request_id)s] [ib_miniprojects_backend - "+os.environ.get("STAGE", "local")+
+            'format': "[%(request_id)s] [ib_miniprojects_backend - " + os.environ.get("STAGE", "local") +
                       '] %(levelname)-8s [%(asctime)s]  '
                       '[%(pathname)s] [%(filename)s]'
                       '[%(funcName)s] [%(lineno)d]: %(message)s',
@@ -190,7 +191,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',  # response content types used in admin
     'django.contrib.sessions',  # django sessions used in admin
     'django.contrib.messages',  # info, success, error message in response. admin requires this
-    'django.contrib.staticfiles',  # host the static files
+    'django.contrib.staticfiles',  # host the static files,
 ]
 
 THIRD_PARTY_APPS_BASE = [
@@ -276,7 +277,6 @@ TEMPLATES = [
     },
 ]
 
-
 # *********************** Middleware *************************#
 
 MIDDLEWARE = [
@@ -303,6 +303,7 @@ MIDDLEWARE = [
 MIDDLEWARE.insert(0, 'ib_common.logger.log_filters_middleware.LogFiltersMiddleware')
 
 from django.utils.translation import ugettext_lazy as _
+
 LANGUAGES = (
     ('en', _('English')),
     ('te', _('Telugu')),
@@ -337,3 +338,9 @@ TEST_RUNNER = 'snapshottest.django.TestRunner'
 MOCK_X_IB_REQUEST_ID = True
 
 STAGE = os.environ.get("STAGE", "local")
+
+DEFAULT_OAUTH_APPLICATION_NAME = "auth_app"
+DEFAULT_OAUTH_CLIENT_ID = "myclientid"
+DEFAULT_OAUTH_CLIENT_SECRET = "myclientsecret"
+DEFAULT_OAUTH_SCOPES = "read write update delete superuser"
+DEFAULT_ACCESS_TOKEN_EXPIRY_IN_SECONDS = 1000000000

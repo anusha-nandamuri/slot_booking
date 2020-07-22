@@ -99,3 +99,5 @@ LOGGING['handlers'] = {
                         "aws_request_id", "stage"]
     }
 }
+
+AUTH_USER_MODEL = 'auth_app.User'
