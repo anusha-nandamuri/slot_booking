@@ -1,17 +1,27 @@
-from abc import ABC
-from abc import abstractmethod
+import abc
+from typing import List
+
+from django.http import HttpResponse
+
+from slot_booking.interactors.storages.dtos import AvailableSlotsDto, CompleteSlotDetailsDto
 
 
-class PresenterInterface(ABC):
-
-    @abstractmethod
-    def get_create_post_response(self, post_id: int):
+class AvailableSlotsPresenterInterface:
+    @abc.abstractmethod
+    def get_available_slots_response(
+            self, available_slots_dto: List[AvailableSlotsDto]
+    ) -> HttpResponse:
         pass
 
-    @abstractmethod
-    def raise_invalid_post_id_exception(self):
+
+class UpcomingSlotsPresenterInterface:
+    @abc.abstractmethod
+    def get_upcoming_slots_response(
+            self, upcoming_slots_dto: List[CompleteSlotDetailsDto]
+    ) -> HttpResponse:
         pass
 
-    @abstractmethod
-    def get_create_comment_response(self, comment_id: int):
+class PreviousSlotsPresenterInterface:
+    @abc.abstractmethod
+    def get_limit_bad_request_response(self, error_obj: InvalidLimitValue):
         pass
