@@ -203,6 +203,7 @@
          "post":{
             "operationId":"signup",
             "description":"user sign up",
+            "security":[],
             "parameters":[
                {
                   "$ref":"#/parameters/UserParameters"

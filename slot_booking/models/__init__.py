@@ -1,4 +1,9 @@
-__all__ = []
+from slot_booking.models.slot import Slot
+from slot_booking.models.user_slot import UserSlot
+from slot_booking.models.washing_machine import WashingMachine
+
+
+__all__ = [Slot, UserSlot, WashingMachine]
 
 # class DummyModel(AbstractDateTimeModel):
 #     """

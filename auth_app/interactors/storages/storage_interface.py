@@ -15,4 +15,3 @@ class StorageInterface:
     @abc.abstractmethod
     def signup_user(self, username: str, password: str):
         pass
-
